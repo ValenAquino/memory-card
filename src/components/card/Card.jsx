@@ -1,22 +1,33 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-export const Card = ({pokemon_id}) => {
-  const fetchPokemon = () => {
+export const Card = ({ pokemon_id }) => {
+  const [pokemon, setPokemon] = useState(" ");
+
+  useEffect(() => {
     const url = "https://pokeapi.co/api/v2/pokemon/";
     fetch(url + pokemon_id)
       .then((res) => res.json())
-      .catch((err) => console.error(err));
-  };
+      .then((json) => {
+        console.log(json);
+        let pokemon = {
+          id: json.id,
+          name: json.name,
+          img: json["sprites"]["other"]["official-artwork"]["front_default"],
+        };
 
-  fetchPokemon();
+        setPokemon(pokemon);
+      })
+      .catch((err) => console.error(err));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="card-shadow bg-white hover:scale-105 cursor-pointer h-44 sm:h-64">
-      <div className="bg-red-900 p-6 h-36 sm:h-48">
-        <img src="" alt="" />
+      <div className="bg-red-900 p-6 h-36 sm:h-48 flex justify-items-center items-center">
+        <img src={pokemon.img} alt={pokemon.name} className="h-max"/>
       </div>
-      <span className="bg-white text-sm sm:text-lg sm:font-medium text-red-800 p-1 sm:p-6 block h-auto">
-        Nombre del pk
+      <span className="pokemon-name">
+        {pokemon.name}
       </span>
     </div>
   );

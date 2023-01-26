@@ -23,3 +23,7 @@
 .main {
   @apply grid grid-cols-2  sm:grid-cols-3 my-9 m-3 sm:m-6 lg:grid-cols-4 lg:p-12 lg:mx-12 gap-3 sm:gap-8 sm:min-h-screen;
 }
+
+.pokemon-name {
+  @apply bg-white text-sm sm:text-lg sm:font-medium text-red-800 p-1 sm:p-6 block h-auto capitalize
+}
