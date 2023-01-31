@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Card } from "./card/Card";
+import PokemonContext from "../contexts/PokemonContext";
+import ScoreContext from "../contexts/ScoreContext";
 
 export const Main = () => {
-  let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
-  const pokemones = array.map((el, i) => (
-    <Card pokemon_id={el} key={"pokemon-" + i} />
+  const score = useContext(ScoreContext);
+  const { pokemonIDs } = useContext(PokemonContext);
+
+  const pokemones = pokemonIDs.map((id) => (
+    <Card pok_id={id} key={"pokemon-" + id} />
   ));
 
-  return <div className="main">{pokemones}</div>;
+  return <div className="main"> {pokemones} </div>;
 };
