@@ -1,15 +1,44 @@
-import React, { useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { Card } from "./card/Card";
-import PokemonContext from "../contexts/PokemonContext";
-import ScoreContext from "../contexts/ScoreContext";
+import { levels, fetchPokemon } from "../utils";
 
 export const Main = () => {
-  const score = useContext(ScoreContext);
-  const { pokemonIDs } = useContext(PokemonContext);
+  const [pokemons_data, setPokemonData] = useState([]);
+  const [pokemon_cards, setPokemonCards] = useState([]);
 
-  const pokemones = pokemonIDs.map((id) => (
-    <Card pok_id={id} key={"pokemon-" + id} />
-  ));
+  const handleClick = (id) => {
+    let pokemon = pokemons_data.find((pokemon) => pokemon.id === id);
+    let clicked_pokemon = { ...pokemon, clicked: true };
+    console.log(clicked_pokemon)
+    setPokemonData([...pokemons_data, clicked_pokemon]);
+  };
 
-  return <div className="main"> {pokemones} </div>;
+  const createPokemonCard = (pokemon) => {
+    return (
+      <Card
+        key={"pokemon-" + pokemon.id}
+        pokemon={pokemon}
+        handleClick={handleClick}
+      />
+    );
+  };
+
+  useEffect(() => {
+    const getPokemons = async () => {
+      const temp_pokemons_data = [];
+      const temp_pokemon_cards = [];
+
+      for (const id of levels[0]) {
+        const pokemon = await fetchPokemon(id);
+        temp_pokemons_data.push(pokemon);
+        temp_pokemon_cards.push(createPokemonCard(pokemon));
+      }
+      setPokemonData([...pokemons_data, temp_pokemons_data]);
+      setPokemonCards([...pokemon_cards, temp_pokemon_cards]);
+    };
+
+    getPokemons();
+  }, []);
+
+  return <div className="main">{pokemon_cards}</div>;
 };
