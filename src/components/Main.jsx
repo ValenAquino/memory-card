@@ -1,44 +1,41 @@
 import React, { useEffect, useState } from "react";
 import { Card } from "./card/Card";
-import { levels, fetchPokemon } from "../utils";
+import { fetchPokemons } from "../utils";
 
 export const Main = () => {
-  const [pokemons_data, setPokemonData] = useState([]);
-  const [pokemon_cards, setPokemonCards] = useState([]);
+  const [pokemonsData, setPokemonData] = useState([]);
+  const [level, setLevel] = useState(0);
 
-  const handleClick = (id) => {
-    let pokemon = pokemons_data.find((pokemon) => pokemon.id === id);
-    let clicked_pokemon = { ...pokemon, clicked: true };
-    console.log(clicked_pokemon)
-    setPokemonData([...pokemons_data, clicked_pokemon]);
-  };
-
-  const createPokemonCard = (pokemon) => {
-    return (
-      <Card
-        key={"pokemon-" + pokemon.id}
-        pokemon={pokemon}
-        handleClick={handleClick}
-      />
-    );
+  const handleCardClick = (id) => {
+    const updated_pokemons = pokemonsData.map((pokemon) => {
+      if (pokemon.id === id) {
+        return { ...pokemon, clicked: true };
+      } else {
+        return pokemon;
+      }
+    });
+    
+    setPokemonData(updated_pokemons);
   };
 
   useEffect(() => {
-    const getPokemons = async () => {
-      const temp_pokemons_data = [];
-      const temp_pokemon_cards = [];
-
-      for (const id of levels[0]) {
-        const pokemon = await fetchPokemon(id);
-        temp_pokemons_data.push(pokemon);
-        temp_pokemon_cards.push(createPokemonCard(pokemon));
-      }
-      setPokemonData([...pokemons_data, temp_pokemons_data]);
-      setPokemonCards([...pokemon_cards, temp_pokemon_cards]);
+    const loadCards = async () => {
+      setPokemonData(await fetchPokemons(level));
     };
 
-    getPokemons();
+    loadCards();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <div className="main">{pokemon_cards}</div>;
+  return (
+    <div className="main">
+      {pokemonsData.map((pokemon) => (
+        <Card
+          pokemon={pokemon}
+          key={"pokemon-" + pokemon.id}
+          handleCardClick={handleCardClick}
+        />
+      ))}
+    </div>
+  );
 };

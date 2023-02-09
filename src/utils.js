@@ -17,4 +17,14 @@ const fetchPokemon = async (pokemon_id) => {
   };
 };
 
-export { levels, fetchPokemon };
+const fetchPokemons = async (level) => {
+  const pokemons = [];
+
+  for (const id of levels[level]) {
+    pokemons.push(await fetchPokemon(id));
+  }
+
+  return pokemons;
+}
+
+export { levels, fetchPokemons };
