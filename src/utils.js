@@ -25,6 +25,10 @@ const fetchPokemons = async (level) => {
   }
 
   return pokemons;
-}
+};
 
-export { levels, fetchPokemons };
+const shuffleArray = (array) => {
+  return [...array].sort(() => 0.5 - Math.random());
+};
+
+export { fetchPokemons, shuffleArray };

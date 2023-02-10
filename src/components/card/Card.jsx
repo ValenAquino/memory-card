@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 // import ScoreContext from "../../contexts/ScoreContext";
 
 export const Card = ({ pokemon, handleCardClick }) => {
