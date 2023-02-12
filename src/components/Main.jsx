@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Card } from "./card/Card";
 import { fetchPokemons, shuffleArray } from "../utils";
+import ScoreContext from "../contexts/ScoreContext";
 
 export const Main = () => {
   const [pokemonsData, setPokemonData] = useState([]);
   const [level, setLevel] = useState(0);
-  const [gameWon, setGameWon] = useState(false);
-
+  const {sumScore, resetScore} = useContext(ScoreContext);
+  
   const resetGame = async () => {
     setPokemonData(await fetchPokemons(0));
+    resetScore();
   };
 
   const wasClicked = (id) => {
@@ -17,8 +19,7 @@ export const Main = () => {
 
   const loadNextLevel = () => {
     if (level === 2) {
-      setGameWon(true);
-      alert("You won");
+      setLevel(0);
     } else {
       setLevel(level + 1);
     }
@@ -53,6 +54,7 @@ export const Main = () => {
       resetGame();
     } else {
       setClickedTrue(id);
+      sumScore();
     }
   };
 

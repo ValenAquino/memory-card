@@ -31,4 +31,19 @@ const shuffleArray = (array) => {
   return [...array].sort(() => 0.5 - Math.random());
 };
 
-export { fetchPokemons, shuffleArray };
+const updateBestScore = (bestScore) => {
+  localStorage.setItem("bestScore", JSON.stringify(bestScore));
+}
+
+const getBestScore = () => {
+  let serializedScore = localStorage.getItem("bestScore");
+
+  if(serializedScore) {
+    return JSON.parse(serializedScore);
+  }
+  else {
+    return "Error";
+  }
+}
+
+export { fetchPokemons, shuffleArray, updateBestScore, getBestScore  };
